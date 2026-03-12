@@ -108,4 +108,3 @@ CREATE TABLE Sales (
 
     f.write("\nCOMMIT;\n")
 
-print("SQL file 'bandcamp_spotify_data.sql' created successfully!")
