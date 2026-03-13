@@ -10,8 +10,9 @@ artists = pd.read_csv("data/spotify_artists_cleaned.csv")
 tracks  = pd.read_csv("data/spotify_tracks_cleaned.csv")
 bc      = pd.read_csv("data/bandcamp_sales_cleaned.csv")
 
-# Deduplicate artists
+# Deduplicate artists and remove names with non-ASCII chars (don't work on oracle)
 artists = artists.drop_duplicates(subset=["artist_name"])
+artists = artists[artists["artist_name"].apply(lambda x: str(x).isascii())]
 
 # String normalizing function to help with matching artist names that appear differently on Bandcamp/Spotify 
 def normalize(s):
@@ -31,7 +32,7 @@ tracks = tracks[tracks_norm.isin(artist_norm)].copy()
 # Set Tracks artist name to "correct" name (the one on spotify)
 tracks["artist_name"] = tracks["artist_name"].apply(lambda n: artist_norm[normalize(n)])
 
-# Remove tracks with non-ASCII characters (don't work on oracle)
+# Remove tracks with non-ASCII characters
 tracks = tracks[tracks["track_name"].apply(lambda x: str(x).isascii())]
 
 # Deduplicate tracks
