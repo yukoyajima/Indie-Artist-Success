@@ -28,6 +28,9 @@ artist_norm = {normalize(n): n for n in artists["artist_name"]}
 tracks_norm = tracks["artist_name"].apply(normalize)
 tracks = tracks[tracks_norm.isin(artist_norm)].copy()
 
+# Set Tracks artist name to "correct" name (the one on spotify)
+tracks["artist_name"] = tracks["artist_name"].apply(lambda n: artist_norm[normalize(n)])
+
 # Deduplicate tracks
 tracks = tracks.drop_duplicates(subset=["track_id"])
 tracks = tracks.drop_duplicates(subset=["track_name", "artist_name"])
@@ -36,7 +39,7 @@ tracks = tracks.drop_duplicates(subset=["track_name", "artist_name"])
 bc_norm = bc["artist_name"].apply(normalize)
 bc = bc[bc_norm.isin(artist_norm)].copy()
 
-# Set BC name to "correct" name (the one on spotify)
+# Set BC artist name to "correct" name (the one on spotify)
 bc["artist_name"] = bc["artist_name"].apply(
     lambda n: artist_norm[normalize(n)]
 )
