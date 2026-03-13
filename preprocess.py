@@ -63,7 +63,7 @@ def into_oracle_value(val, is_str=False):
     return str(val)
 
 # WRITE SQL FILE
-with open("bandcamp_spotify_data_clean.sql", "w", encoding="utf-8") as f:
+with open("bandcamp_spotify_data.sql", "w", encoding="utf-8") as f:
 
     f.write("SET DEFINE OFF;\n\n")
 
