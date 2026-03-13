@@ -31,6 +31,9 @@ tracks = tracks[tracks_norm.isin(artist_norm)].copy()
 # Set Tracks artist name to "correct" name (the one on spotify)
 tracks["artist_name"] = tracks["artist_name"].apply(lambda n: artist_norm[normalize(n)])
 
+# Remove tracks with non-ASCII characters (don't work on oracle)
+tracks = tracks[tracks["track_name"].apply(lambda x: str(x).isascii())]
+
 # Deduplicate tracks
 tracks = tracks.drop_duplicates(subset=["track_id"])
 tracks = tracks.drop_duplicates(subset=["track_name", "artist_name"])
