@@ -47,7 +47,7 @@ df = pd.read_sql(RQ3_QUERY, connection)
 connection.close()
 
 artists = df
-artists.head()
+
 
 # Linear regression - base model
 y = artists['POPULARITY'].to_numpy()
