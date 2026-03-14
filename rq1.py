@@ -24,12 +24,8 @@ dsn = oracledb.makedsn("localhost", 1522, service_name="stu")
 connection = oracledb.connect(user=USER, password=PASSWORD, dsn=dsn)
 
 # SQL Query:
-# Joins Artists and Sales on artist_name
-# Aggregates per-artist sales metrics for artists with at least 2 transactions
 
-# The reason for all three metrics is that I had originally looked at more relationships between
-# artist popularity and sales metrics, but the only one with a significant correlation was average item price.
-# Analysis on that correlation is shown below.
+
 
 RQ3_QUERY = """
 SELECT
@@ -39,7 +35,7 @@ SELECT
     total_releases,
     years_active,
     releases_per_year
-FROM Artistss
+FROM Artists
 WHERE popularity IS NOT NULL
   AND followers IS NOT NULL
   AND total_releases IS NOT NULL
