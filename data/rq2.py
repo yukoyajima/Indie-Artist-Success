@@ -1,8 +1,15 @@
+"""
+RQ2: Question 2: Within indie and electronic genres, do track-level audio features (such as danceability, 
+energy, and tempo) predict track popularity on Spotify?
+
+External libraries: oracledb, pandas, matplotlib, scipy, numpy
+"""
+
 import pandas as pd 
 import oracledb
 import matplotlib.pyplot as plt
 import numpy as np
-
+#External Libraries for Regression Model
 from sklearn.model_selection import cross_val_score, cross_validate, train_test_split, RandomizedSearchCV
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
@@ -10,6 +17,16 @@ from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
 from scipy.stats import loguniform
 from sklearn.compose import  make_column_transformer
 from sklearn.metrics import r2_score
+
+
+# FOR GRADERS
+# To replicate results, 
+#   1. Upload bandcamp_spotify_data.sql to Oracle server
+#   2. Set USER and PASSWORD below to your own credentials
+#   3. Open an SSH tunnel: ssh -L 1522:localhost:1521 {TARGET SERVER} -N
+#   4. Run this script
+USER     = "ora_abes1602@stu"
+PASSWORD = "a42466268"
 
 
 # db query 
@@ -54,7 +71,7 @@ preprocessor = make_column_transformer(
 )
 
 # tuning alpha
-# pipeline
+# feaature transformation pipeline
 pipe_ridge= make_pipeline(preprocessor, Ridge())
 
 param_dist = {
