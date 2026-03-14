@@ -40,7 +40,7 @@ WHERE popularity IS NOT NULL
   AND followers IS NOT NULL
   AND total_releases IS NOT NULL
   AND years_active IS NOT NULL
-  AND releases_per_year IS NOT NULL;
+  AND releases_per_year IS NOT NULL
 """
 
 df = pd.read_sql(RQ1_QUERY, connection)
