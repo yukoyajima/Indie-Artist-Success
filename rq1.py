@@ -16,7 +16,7 @@ import numpy as np
 #   2. Set USER and PASSWORD below to your own credentials
 #   3. Open an SSH tunnel: ssh -L 1522:localhost:1521 {TARGET SERVER} -N
 #   4. Run this script
-USER     = "isaac184"
+USER     = "ora_isaac184"
 PASSWORD = "a97241418"
 
 # Connect to Oracle server
