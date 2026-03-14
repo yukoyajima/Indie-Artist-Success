@@ -27,7 +27,7 @@ connection = oracledb.connect(user=USER, password=PASSWORD, dsn=dsn)
 
 
 
-RQ3_QUERY = """
+RQ1_QUERY = """
 SELECT
     artist_name,
     popularity,
@@ -43,7 +43,7 @@ WHERE popularity IS NOT NULL
   AND releases_per_year IS NOT NULL;
 """
 
-df = pd.read_sql(RQ3_QUERY, connection)
+df = pd.read_sql(RQ1_QUERY, connection)
 connection.close()
 
 artists = df
