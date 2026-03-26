@@ -17,8 +17,8 @@ from pymongo import MongoClient
 
 # CWL = "PUT_YOUR_CWL_HERE"
 # SNUM = "PUT_YOUR_STUDENT_NUMBER_HERE"
-CWL = "PUT_YOUR_CWL_HERE"
-SNUM = "PUT_YOUR_STUDENT_NUMBER_HERE"
+CWL = "abes1602"
+SNUM = "42466268"
 
 artists = pd.read_csv("data/spotify_artists_cleaned.csv")
 tracks  = pd.read_csv("data/spotify_tracks_cleaned.csv")
@@ -32,38 +32,55 @@ artists = artists[artists["artist_name"].apply(lambda x: str(x).isascii())]
 
 # String normalizing function to help with matching artist names
 # that appear differently on Bandcamp/Spotify
-def normalize(s):
+def normalize_artist_name(s):
     s = str(s).lower().strip()
-    s = s.replace("&", "and")
     s = re.sub(r"[^\w\s]", "", s)
     s = re.sub(r"\s+", " ", s).strip()
     return s
 
-# Normalize artist names
-artist_norm = {normalize(n): n for n in artists["artist_name"]}
 
-# Filter tracks to only those with an artist_name in artists
-tracks_norm = tracks["artist_name"].apply(normalize)
-tracks = tracks[tracks_norm.isin(artist_norm)].copy()
+def split_and_normalize_artists(s):
+    s = str(s).lower().strip()
+    parts = re.split(r"[&,;]", s)
 
-# Set Tracks artist name to "correct" name (the one on spotify)
-tracks["artist_name"] = tracks["artist_name"].apply(lambda n: artist_norm[normalize(n)])
+    cleaned = []
+    for part in parts:
+        part = part.strip()
+        part = re.sub(r"[^\w\s]", "", part)
+        part = re.sub(r"\s+", " ", part).strip()
+        if part:
+            cleaned.append(part)
 
-# Remove tracks with non-ASCII characters
+    return cleaned
+
+
+# map normalized Spotify artist names to originally occurring Spotify artist names
+artist_norm = {
+    normalize_artist_name(n): n
+    for n in artists["artist_name"]
+}
+
+## after normalizing artists and creating lists with multi-artists for multi-artist artist names in artist_list
+## exploding artist_list and mapping each value to artist_norm for single artist values in artist_name
+
+# ---------- TRACKS ----------
+tracks = tracks.copy()
+tracks["artist_list"] = tracks["artist_name"].apply(split_and_normalize_artists)
+tracks = tracks.explode("artist_list")
+tracks = tracks[tracks["artist_list"].isin(artist_norm)].copy()
+tracks["artist_name"] = tracks["artist_list"].map(artist_norm)
+
 tracks = tracks[tracks["track_name"].apply(lambda x: str(x).isascii())]
-
-# Deduplicate tracks
-tracks = tracks.drop_duplicates(subset=["track_id"])
+tracks = tracks.drop_duplicates(subset=["track_id", "artist_name"])
 tracks = tracks.drop_duplicates(subset=["track_name", "artist_name"])
 
-# Filter Bandcamp rows to only those with an artist_name in artists
-bc_norm = bc["artist_name"].apply(normalize)
-bc = bc[bc_norm.isin(artist_norm)].copy()
 
-# Set BC artist name to "correct" name (the one on spotify)
-bc["artist_name"] = bc["artist_name"].apply(
-    lambda n: artist_norm[normalize(n)]
-)
+# ---------- BANDCAMP ----------
+bc = bc.copy()
+bc["artist_list"] = bc["artist_name"].apply(split_and_normalize_artists)
+bc = bc.explode("artist_list")
+bc = bc[bc["artist_list"].isin(artist_norm)].copy()
+bc["artist_name"] = bc["artist_list"].map(artist_norm)
 
 # Sample to match the Oracle-side preprocessing
 bc = bc.sample(n=min(2000, len(bc)), random_state=123)
