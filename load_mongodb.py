@@ -17,8 +17,8 @@ from pymongo import MongoClient
 
 # CWL = "PUT_YOUR_CWL_HERE"
 # SNUM = "PUT_YOUR_STUDENT_NUMBER_HERE"
-CWL = "abes1602"
-SNUM = "42466268"
+CWL = "yyajima"
+SNUM = "24715716"
 
 artists = pd.read_csv("data/spotify_artists_cleaned.csv")
 tracks  = pd.read_csv("data/spotify_tracks_cleaned.csv")
