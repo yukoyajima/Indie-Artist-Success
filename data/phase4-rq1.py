@@ -8,6 +8,13 @@ import matplotlib.pyplot as plt
 # RQ1: Which artist-level attributes (such as catalog size, release frequency, and follower count) 
 # are most predictive of popularity for indie and electronic artists on Spotify?  
 
+# FOR GRADERS
+# To replicate results,
+#   1. Run load_mongodb.py with your CWL/SNUM to upload the database
+#   2. Set CWL and SNUM below to your own credentials
+#   3. Open an SSH tunnel: ssh -l CWL -L localhost:27017:nosql.students.cs.ubc.ca:27017 remote.students.cs.ubc.ca
+#   4. Run this script
+
 CWL = "yyajima"
 SNUM = "24715716"
 

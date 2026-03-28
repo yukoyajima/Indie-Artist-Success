@@ -14,6 +14,16 @@ from sklearn.pipeline import make_pipeline
 from sklearn.compose import  make_column_transformer
 from sklearn.model_selection import train_test_split
 
+# RQ2: Within indie and electronic genres, do track-level audio features (such as danceability, 
+# energy, and tempo) predict track popularity on Spotify?
+
+
+# FOR GRADERS
+# To replicate results,
+#   1. Run load_mongodb.py with your CWL/SNUM to upload the database
+#   2. Set CWL and SNUM below to your own credentials
+#   3. Open an SSH tunnel: ssh -l CWL -L localhost:27017:nosql.students.cs.ubc.ca:27017 remote.students.cs.ubc.ca
+#   4. Run this script
 
 CWL = "abes1602"
 SNUM = "42466268"
